@@ -1,20 +1,47 @@
+--Query to find out the data type of the table
+EXEC sp_help [Employee Data]
+
+
+--Query to demonstrate the ability of table creation
+--STEP 1
+CREATE TABLE [dbo].[Employee Data2] (
+	EEID nvarchar(255),
+	[Full Name] nvarchar(255),
+	[Job Title] nvarchar(255),
+	Department nvarchar(255),
+	[Business Unit] nvarchar(255),
+	Gender nvarchar(50),
+	Ethnicity nvarchar(50),
+	Age INT,
+	[Hire Date] DATETIME,
+	[Annual Salary] MONEY,
+	[Bonus %] INT,
+	Country nvarchar(255),
+	City nvarchar(255),
+	[Exit Date] DATETIME
+)
+
+--STEP 2
+INSERT INTO [dbo].[Employee Data2] (EEID, [Full Name], [Job Title], Department, [Business Unit], Gender, Ethnicity, Age, [Hire Date], [Annual Salary], [Bonus %], Country, City, [Exit Date])
+SELECT EEID, [Full Name], [Job Title], Department, [Business Unit], Gender, Ethnicity, Age, [Hire Date], [Annual Salary], [Bonus %], Country, City, [Exit Date] FROM [dbo].[Employee Data];
+
+SELECT * FROM [dbo].[Employee Data2]
+
+-- Data Manipulation Queries
 SELECT *
 FROM [dbo].[Employee Data]
 
-
 -- Average Salary by Departments and Business Units
-SELECT [Business Unit], Department, AVG([Annual Salary]) AS [Avg. Annual Salary]
+SELECT [Business Unit], Department, AVG([Annual Salary]) [Avg. Annual Salary]
 FROM [dbo].[Employee Data]
 GROUP BY [Business Unit], Department
 ORDER BY [Business Unit], Department
 
-
 -- Employee Age Analysis
+SELECT MIN(Age), MAX(Age), AVG(Age)
+FROM [dbo].[Employee Data]
 
---SELECT MIN(Age), MAX(Age), AVG(Age)
---FROM [dbo].[Employee Data]
-
-
+-- Employee Age Grouping Query
 SELECT EEID, 
 	   [Full Name],
 	   Department,
@@ -31,25 +58,3 @@ SELECT EEID,
 FROM [dbo].[Employee Data]
 ORDER BY [Age Group], Department, Gender, [Business Unit]
 
-
--- Average bonus percentage depending on department
-SELECT Department, AVG([Bonus %]) AS [Avg. Bonus]
-FROM [dbo].[Employee Data]
-GROUP BY Department
-ORDER BY [Avg. Bonus]
-
-
--- The average number of years that employees spend in the company
-SELECT 
-    Department, 
-    AVG(DATEDIFF(YEAR, [Hire Date], ISNULL([Exit Date], GETDATE()))) AS [Avg. YearsInCompany]
-FROM [dbo].[Employee Data]
-GROUP BY Department
-ORDER BY [Avg. YearsInCompany] DESC;
-
--- The total amount of employees' salaries after five years
-SELECT EEID, [Full Name], [Job Title], Department, 
-	   [Annual Salary] + ([Annual Salary] * [Bonus %] / 100) As [Annual Income],
-	   ([Annual Salary] + ([Annual Salary] * [Bonus %] / 100)) * 5 As [Five Year Income]
-FROM [dbo].[Employee Data]
-ORDER BY Department ASC
