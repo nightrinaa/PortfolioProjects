@@ -1,8 +1,8 @@
---Query to find out the data type of the table
+--Query that finds out the data type of the table
 EXEC sp_help [Employee Data]
 
 
---Query to demonstrate the ability of table creation
+--Query that demonstrates the ability of table creation
 --STEP 1
 CREATE TABLE [dbo].[Employee Data2] (
 	EEID nvarchar(255),
